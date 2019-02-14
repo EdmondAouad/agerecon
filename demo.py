@@ -8,6 +8,8 @@ from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
 import pickle
 import os
+from pathlib import Path
+my_file = Path('predictions.pkl')
 
 pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
 modhash = 'fbe63257a054c1c5466cfd7bf14646d6'
@@ -145,8 +147,6 @@ def main():
     #preds = open("predictions.txt", "w")
     #preds.write(ages_pred)
     #preds.close()
-    from pathlib import Path
-    my_file = Path('predictions.pkl')
     if my_file.is_file():
         # file exists
         last_ressources=pickle.load(open('predictions.pkl','rb'))
