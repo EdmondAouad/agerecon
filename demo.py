@@ -96,6 +96,7 @@ def main():
 
     image_generator = yield_images_from_dir(image_dir) if image_dir else yield_images()
     ages_pred = ""
+    pred=""
     for img in image_generator:
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
