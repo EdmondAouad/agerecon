@@ -121,8 +121,10 @@ def main():
             ages = np.arange(0, 101).reshape(101, 1)
             predicted_ages = results[1].dot(ages).flatten()
             
-            ages_pred += str(predicted_ages) + " "
-
+            #ages_pred += str(predicted_ages) + " "
+            
+            pred += {'Age':predicted_ages,'Gender':predicted_genders}
+            
             ## draw results
             #for i, d in enumerate(detected):
             #    label = "{}, {}".format(int(predicted_ages[i]),
@@ -134,8 +136,13 @@ def main():
 
         if key == 27:  # ESC
             break
-    preds = open("predictions.txt", "w")
+    #preds = open("predictions.txt", "w")
+    #preds.write(ages_pred)
+    #preds.close()
+    
+    preds2=open("predictions.txt", "w")
     preds.write(ages_pred)
     preds.close()
+    
 if __name__ == '__main__':
     main()
