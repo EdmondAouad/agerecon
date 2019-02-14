@@ -83,43 +83,41 @@ def yield_images_from_dir(image_dir):
             
 
 def analyse(img,detecteur,model,margin):
-    try:
-        img_size = 64
-        input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img_h, img_w, _ = np.shape(input_img)
+    img_size = 64
+    input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img_h, img_w, _ = np.shape(input_img)
 
-        # detect faces using dlib detector
-        detected = detecteur(input_img, 1)
-        faces = np.empty((len(detected), img_size, img_size, 3))
+    # detect faces using dlib detector
+    detected = detecteur(input_img, 1)
+    faces = np.empty((len(detected), img_size, img_size, 3))
 
-        if len(detected) > 0:
-            for i, d in enumerate(detected):
-                x1, y1, x2, y2, w, h = d.left(), d.top(), d.right() + 1, d.bottom() + 1, d.width(), d.height()
-                xw1 = max(int(x1 - margin * w), 0)
-                yw1 = max(int(y1 - margin * h), 0)
-                xw2 = min(int(x2 + margin * w), img_w - 1)
-                yw2 = min(int(y2 + margin * h), img_h - 1)
-                cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
-                # cv2.rectangle(img, (xw1, yw1), (xw2, yw2), (255, 0, 0), 2)
-                faces[i, :, :, :] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
+    if len(detected) > 0:
+        for i, d in enumerate(detected):
+            x1, y1, x2, y2, w, h = d.left(), d.top(), d.right() + 1, d.bottom() + 1, d.width(), d.height()
+            xw1 = max(int(x1 - margin * w), 0)
+            yw1 = max(int(y1 - margin * h), 0)
+            xw2 = min(int(x2 + margin * w), img_w - 1)
+            yw2 = min(int(y2 + margin * h), img_h - 1)
+            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+            # cv2.rectangle(img, (xw1, yw1), (xw2, yw2), (255, 0, 0), 2)
+            faces[i, :, :, :] = cv2.resize(img[yw1:yw2 + 1, xw1:xw2 + 1, :], (img_size, img_size))
 
-            # predict ages and genders of the detected faces
-            results = model.predict(faces)
-            predicted_genders = results[0]
-            ages = np.arange(0, 101).reshape(101, 1)
-            predicted_ages = results[1].dot(ages).flatten()
+        # predict ages and genders of the detected faces
+        results = model.predict(faces)
+        predicted_genders = results[0]
+        ages = np.arange(0, 101).reshape(101, 1)
+        predicted_ages = results[1].dot(ages).flatten()
 
-            #ages_pred += str(predicted_ages) + " "
+        #ages_pred += str(predicted_ages) + " "
 
-            #pred += str({'Age':predicted_ages,'Gender':predicted_genders}) + " "
+        #pred += str({'Age':predicted_ages,'Gender':predicted_genders}) + " "
 
-            ## draw results
-            for i, d in enumerate(detected):
-                label = "{}, {}".format(int(predicted_ages[i]),
-                                        "M" if predicted_genders[i][0] < 0.5 else "F")
-                return label
-    except:
-        print('error')
+        ## draw results
+        for i, d in enumerate(detected):
+            label = "{}, {}".format(int(predicted_ages[i]),
+                                    "M" if predicted_genders[i][0] < 0.5 else "F")
+            return label
+
       
 
         #    draw_label(img, (d.left(), d.top()), label)
