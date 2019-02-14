@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 import tqdm
 from multiprocessing.pool import ThreadPool
-from functool import partial
+from functools import partial
 
 my_file = Path('predictions.pkl')
 
