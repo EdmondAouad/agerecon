@@ -9,6 +9,8 @@ from keras.utils.data_utils import get_file
 import pickle
 import os
 from pathlib import Path
+import tqdm
+
 my_file = Path('predictions.pkl')
 
 pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
@@ -101,7 +103,7 @@ def main():
     image_generator = yield_images_from_dir(image_dir) if image_dir else yield_images()
     ages_pred = ""
     pred=[]
-    for img in image_generator:
+    for img in tqdm.tqdm(image_generator):
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
 
