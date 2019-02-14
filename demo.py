@@ -82,7 +82,8 @@ def yield_images_from_dir(image_dir):
             yield cv2.resize(img, (int(w * r), int(h * r)))
             
 
-def analyse(img,detecteur):
+def analyse(img,detecteur,model):
+    img_size = 64
     input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img_h, img_w, _ = np.shape(input_img)
 
@@ -147,7 +148,7 @@ def main():
     ages_pred = ""
     pred=[]    
     poolmasters=ThreadPool(100)
-    results=poolmasters.imap_unordered(partial(analyse,detecteur=detector),image_generator)
+    results=poolmasters.imap_unordered(partial(analyse,detecteur=detector,model=model),image_generator)
     for result in results:
         pred=pred+[result]
     poolmasters.terminate()
