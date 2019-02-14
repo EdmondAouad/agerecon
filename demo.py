@@ -119,11 +119,6 @@ def analyse(img):
         #    draw_label(img, (d.left(), d.top()), label)
 
     ##cv2.imshow("result", img)
-    key = cv2.waitKey(-1) if image_dir else cv2.waitKey(30)
-
-    if key == 27:  # ESC
-        break
-        
     return label
 
 
