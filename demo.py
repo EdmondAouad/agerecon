@@ -123,7 +123,7 @@ def main():
             
             #ages_pred += str(predicted_ages) + " "
             
-            pred += {'Age':predicted_ages,'Gender':predicted_genders}
+            pred += str({'Age':predicted_ages,'Gender':predicted_genders}) + " "
             
             ## draw results
             #for i, d in enumerate(detected):
