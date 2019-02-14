@@ -6,6 +6,8 @@ import argparse
 from contextlib import contextmanager
 from wide_resnet import WideResNet
 from keras.utils.data_utils import get_file
+import pickle
+import os
 
 pretrained_model = "https://github.com/yu4u/age-gender-estimation/releases/download/v0.5/weights.28-3.73.hdf5"
 modhash = 'fbe63257a054c1c5466cfd7bf14646d6'
@@ -96,7 +98,7 @@ def main():
 
     image_generator = yield_images_from_dir(image_dir) if image_dir else yield_images()
     ages_pred = ""
-    pred=""
+    pred=[]
     for img in image_generator:
         input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img_h, img_w, _ = np.shape(input_img)
@@ -129,8 +131,10 @@ def main():
             ## draw results
             for i, d in enumerate(detected):
                 label = "{}, {}".format(int(predicted_ages[i]),
-                                        "F" if predicted_genders[i][0] < 0.5 else "M")
-            pred += str([label]) + " " 
+                                        "M" if predicted_genders[i][0] < 0.5 else "F")
+            
+            pred += [label]
+         
             #    draw_label(img, (d.left(), d.top()), label)
 
         ##cv2.imshow("result", img)
@@ -141,10 +145,15 @@ def main():
     #preds = open("predictions.txt", "w")
     #preds.write(ages_pred)
     #preds.close()
-    
-    preds=open("predictions.txt", "w")
-    preds.write(pred)
-    preds.close()
+    from pathlib import Path
+    my_file = Path('predictions.pkl')
+    if my_file.is_file():
+        # file exists
+        last_ressources=pickle.load(open('predictions.pkl','rb'))
+    else:
+        last_ressources=[]
+    pred=last_ressources+pred
+    pickle.dump(pred,open('predictions.pkl','wb'))
     
 if __name__ == '__main__':
     main()
