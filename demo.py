@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import tqdm
 from multiprocessing.pool import ThreadPool
+from functool import partial
 
 my_file = Path('predictions.pkl')
 
@@ -81,12 +82,12 @@ def yield_images_from_dir(image_dir):
             yield cv2.resize(img, (int(w * r), int(h * r)))
             
 
-def analyse(img):
+def analyse(img,detecteur):
     input_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img_h, img_w, _ = np.shape(input_img)
 
     # detect faces using dlib detector
-    detected = detector(input_img, 1)
+    detected = detecteurr(input_img, 1)
     faces = np.empty((len(detected), img_size, img_size, 3))
 
     if len(detected) > 0:
@@ -146,7 +147,7 @@ def main():
     ages_pred = ""
     pred=[]    
     poolmasters=ThreadPool(100)
-    results=poolmasters.imap_unordered(analyse,image_generator)
+    results=poolmasters.imap_unordered(partial(analyse,detecteur=detector),image_generator)
     for result in results:
         pred=pred+[result]
     poolmasters.terminate()
