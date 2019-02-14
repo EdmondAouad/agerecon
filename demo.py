@@ -140,7 +140,7 @@ def main():
     #preds.write(ages_pred)
     #preds.close()
     
-    preds2=open("predictions.txt", "w")
+    preds=open("predictions.txt", "w")
     preds.write(pred)
     preds.close()
     
