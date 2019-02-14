@@ -87,7 +87,7 @@ def analyse(img,detecteur):
     img_h, img_w, _ = np.shape(input_img)
 
     # detect faces using dlib detector
-    detected = detecteurr(input_img, 1)
+    detected = detecteur(input_img, 1)
     faces = np.empty((len(detected), img_size, img_size, 3))
 
     if len(detected) > 0:
