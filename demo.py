@@ -141,7 +141,7 @@ def main():
     #preds.close()
     
     preds2=open("predictions.txt", "w")
-    preds.write(ages_pred)
+    preds.write(pred)
     preds.close()
     
 if __name__ == '__main__':
