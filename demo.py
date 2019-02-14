@@ -146,7 +146,7 @@ def main():
     ages_pred = ""
     pred=[]    
     poolmasters=ThreadPool(100)
-    results=poolmasters.imap_unordered(analyse,img)
+    results=poolmasters.imap_unordered(analyse,image_generator)
     for result in results:
         pred=pred+[result]
     poolmasters.terminate()
