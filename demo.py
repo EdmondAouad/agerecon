@@ -116,12 +116,12 @@ def analyse(img,detecteur,model):
         for i, d in enumerate(detected):
             label = "{}, {}".format(int(predicted_ages[i]),
                                     "M" if predicted_genders[i][0] < 0.5 else "F")
+            return label
       
 
         #    draw_label(img, (d.left(), d.top()), label)
 
     ##cv2.imshow("result", img)
-    return label
 
 
 def main():
@@ -149,7 +149,7 @@ def main():
     pred=[]    
     poolmasters=ThreadPool(100)
     results=poolmasters.imap_unordered(partial(analyse,detecteur=detector,model=model),image_generator)
-    for result in results:
+    for result in tqdm.tqdm(results):
         pred=pred+[result]
     poolmasters.terminate()
     #preds = open("predictions.txt", "w")
